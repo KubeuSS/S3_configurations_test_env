@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+
+IP_FILE="nodes_ips.txt"
+ACCESS_KEY="admin"
+SECRET_KEY="admin123"
+OBJ_SIZE="256KiB"
+OBJECTS=50
+DURATION="60s"
+CONCURRENT=8
+BENCHDATA="eksperyment_01"
+read -r FIRST_VM FIRST_IP < "$IP_FILE"
+HOST="${FIRST_IP}:9000"
+
+while read -r VM_NAME VM_IP; do
+    multipass exec "$VM_NAME" -- bash -c "sync && echo 3 | sudo tee /proc/sys/vm/drop_caches" < /dev/null > /dev/null
+done < "$IP_FILE"
+
+echo "Uruchamianie benchmarku..."
+warp mixed \
+  --host="$HOST" \
+  --access-key="$ACCESS_KEY" \
+  --secret-key="$SECRET_KEY" \
+  --obj.size "$OBJ_SIZE" \
+  --objects "$OBJECTS" \
+  --duration "$DURATION" \
+  --concurrent "$CONCURRENT" \
+  --benchdata "$BENCHDATA" --no-color > /tmp/warp_out.txt 2>&1
+
+grep -vE "WARP|MinIO|λ" /tmp/warp_out.txt

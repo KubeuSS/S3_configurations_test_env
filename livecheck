@@ -1,0 +1,3 @@
+#!/bin/bash
+while read -r NAME IP; do     STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$IP:9000/minio/health/live);     echo "[$NAME] $IP — $STATUS"; done < nodes_ips.txt
+
