@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-
 VM_PREFIX="VM"
 VM_COUNT=6
 CPUS=1
@@ -8,8 +7,8 @@ RAM="1G"
 DISK="8G"
 OS_VERSION="22.04"
 IP_FILE="nodes_ips.txt"
-
 COMMAND=$1
+
 if [ -z "$COMMAND" ]; then
     echo "Błąd: Brak polecenia."
     echo "Użycie: $0 {up|destroy}"
@@ -18,35 +17,37 @@ fi
 
 case $COMMAND in
     up)
-        # Tworzenie VM-ek
         for i in $(seq 1 $VM_COUNT); do
             VM_NAME="${VM_PREFIX}-${i}"
             STATE=$(multipass info "$VM_NAME" 2>/dev/null | grep "^State:" | awk '{print $2}' || echo "Not_Found")
-
             if [ "$STATE" == "Running" ]; then
-                echo ">>> [$VM_NAME] Maszyna już działa."
+                echo ">>> [$VM_NAME] Działa."
             else
-                echo ">>> Tworzenie [$VM_NAME]..."
+                echo ">>> [$VM_NAME]..."
                 multipass launch -n "$VM_NAME" -c "$CPUS" -m "$RAM" -d "$DISK" "$OS_VERSION"
             fi
         done
 
-        # Zapis IP-ków
         echo -e "\nAdresy IP VM:"
-        > "$IP_FILE"
+        : > "$IP_FILE"
+
         for i in $(seq 1 $VM_COUNT); do
             VM_NAME="${VM_PREFIX}-${i}"
-            VM_IP=$(multipass info "$VM_NAME" | grep IPv4 | awk '{print $2}')
-            echo "$VM_NAME $VM_IP" >> "$IP_FILE"
-            echo "$VM_NAME: $VM_IP"
+            VM_IP=$(multipass info "$VM_NAME" | grep IPv4 | awk '{print $2}' || true)
+            if [ -z "$VM_IP" ]; then
+                echo ">>> [$VM_NAME] UWAGA: Brak adresu IP!"
+            else
+                echo "$VM_NAME $VM_IP" >> "$IP_FILE"
+                echo "$VM_NAME: $VM_IP"
+            fi
         done
+
         echo "Gotowe. Adresy IP zapisano w $IP_FILE."
         ;;
-
     destroy)
         for i in $(seq 1 $VM_COUNT); do
-            (multipass stop "${VM_PREFIX}-${i}" 2>/dev/null
-            multipass delete "${VM_PREFIX}-${i}" 2>/dev/null) &
+            (multipass stop "${VM_PREFIX}-${i}" 2>/dev/null || true
+             multipass delete "${VM_PREFIX}-${i}" 2>/dev/null || true) &
         done
         wait
         echo "Robione purge..."
@@ -54,7 +55,6 @@ case $COMMAND in
         rm -f "$IP_FILE"
         echo "Środowisko usunięte."
         ;;
-
     *)
         echo "Nieznana komenda: $COMMAND"
         echo "Użycie: $0 {up|destroy}"

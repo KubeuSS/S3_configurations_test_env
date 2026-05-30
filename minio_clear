@@ -3,9 +3,8 @@ set -e
 while read -r NAME IP; do
     multipass exec "$NAME" -- bash -c "
         pkill -9 minio 2>/dev/null || true
-        rm -f minio minio.log
         sudo umount /mnt/minio-data 2>/dev/null || true
-        rm -f /home/ubuntu/minio-disk.img
+        rm -f /home/ubuntu/minio-disk.img minio.log
     " < /dev/null &
 done < nodes_ips.txt
 wait

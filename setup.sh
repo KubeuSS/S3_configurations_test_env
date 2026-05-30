@@ -13,7 +13,6 @@ has() { command -v "$1" &>/dev/null; }
 echo "=== Sprawdzanie zależności ==="
 MISSING=0
 
-# multipass — wymagany, nie instalujemy automatycznie
 if has multipass; then
     ok "multipass $(multipass version | head -1 | awk '{print $2}')"
 else
@@ -22,7 +21,6 @@ else
     MISSING=1
 fi
 
-# warp
 if has warp; then
     ok "warp $(warp --version 2>/dev/null | head -1 || echo '')"
 else
@@ -33,7 +31,6 @@ else
     ok "warp ${WARP_VERSION} zainstalowany"
 fi
 
-# mc
 if has mc; then
     ok "mc"
 else
@@ -44,8 +41,7 @@ else
     ok "mc zainstalowany"
 fi
 
-# standardowe narzędzia
-for tool in curl jq wget; do
+for tool in curl wget; do
     if has "$tool"; then
         ok "$tool"
     else
