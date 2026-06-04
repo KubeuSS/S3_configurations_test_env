@@ -44,6 +44,19 @@ case $COMMAND in
 
         echo "Gotowe. Adresy IP zapisano w $IP_FILE."
         ;;
+    start)
+        for i in $(seq 1 $VM_COUNT); do
+            VM_NAME="${VM_PREFIX}-${i}"
+            STATE=$(multipass info "$VM_NAME" 2>/dev/null | grep "^State:" | awk '{print $2}' || echo "Not_Found")
+            if [ "$STATE" == "Stopped" ]; then
+                echo ">>> [$VM_NAME] Budzenie..."
+                multipass start "$VM_NAME"
+            else
+                echo ">>> [$VM_NAME] Stan: $STATE (pomijam)"
+            fi
+        done
+        echo "Gotowe."
+        ;;
     destroy)
         for i in $(seq 1 $VM_COUNT); do
             (multipass stop "${VM_PREFIX}-${i}" 2>/dev/null || true
