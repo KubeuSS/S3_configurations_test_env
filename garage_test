@@ -7,7 +7,7 @@ OBJ_SIZE="256KiB"
 OBJECTS=50
 DURATION="60s"
 CONCURRENT=8
-BENCHDATA="eksperyment_garage_01"
+BENCHDATA="results"
 
 if [ ! -f "$CREDS_FILE" ]; then
     echo "[!!] Brak $CREDS_FILE — uruchom najpierw ./garage_deploy.sh" >&2
