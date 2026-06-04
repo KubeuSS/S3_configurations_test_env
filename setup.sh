@@ -31,16 +31,6 @@ else
     ok "warp ${WARP_VERSION} zainstalowany"
 fi
 
-if has mc; then
-    ok "mc"
-else
-    install "Pobieranie i instalowanie mc..."
-    wget -q https://dl.min.io/client/mc/release/linux-amd64/mc -O /tmp/mc
-    chmod +x /tmp/mc
-    sudo mv /tmp/mc /usr/local/bin/
-    ok "mc zainstalowany"
-fi
-
 for tool in curl wget; do
     if has "$tool"; then
         ok "$tool"
@@ -59,9 +49,3 @@ if [ "$MISSING" -eq 1 ]; then
 fi
 
 mkdir -p results
-
-echo "=== Gotowe. Kolejne kroki: ==="
-echo "  1. ./cluster_sim up"
-echo "  2. ./minio_deploy.sh lub ./minio_deploy2.sh"
-echo "  3. ./livecheck"
-echo "  4. ./test"
