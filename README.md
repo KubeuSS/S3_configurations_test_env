@@ -1,4 +1,9 @@
 ```bash
+chmod +x testenv-fullauto/*.sh
+```
+Nadanie uprawnień wszystkim skryptom.
+
+```bash
 ./setup
 ```
 Sprawdza i pobierania wymagania.
