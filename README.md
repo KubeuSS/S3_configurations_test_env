@@ -1,5 +1,5 @@
 ```bash
-chmod +x testenv-fullauto/*.sh
+chmod +x testenv-fullauto/*
 ```
 Nadanie uprawnień wszystkim skryptom.
 
