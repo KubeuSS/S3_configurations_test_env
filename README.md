@@ -21,16 +21,11 @@ Uruchamia proces wdrożenia klastra minio na VM. Przeprowadza zestaw testów o z
 Usuwa minio z VM.
 
 ```bash
-./garage_deploy
-```
-Wdraża klaster Garage na VM.
-
-```bash
-./garage_test
-```
-Przeprowadza testy Garage i zapisuje wynik do results.
-
-```bash
 ./garage_test
 ```
 Usuwa Garage z VM.
+
+```bash
+./cluster_sim destroy
+```
+Usuwa maszyny wirtualne.
