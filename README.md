@@ -4,9 +4,9 @@
 <br>
 
 ```bash
-chmod +x testenv-fullauto/*
+chmod +x *
 ```
-Nadanie uprawnień wszystkim skryptom.
+Nadanie uprawnień wszystkim skryptom w folderze.
 
 <br>
 
