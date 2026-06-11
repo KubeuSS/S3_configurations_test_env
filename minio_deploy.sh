@@ -41,5 +41,5 @@ while read -r VM_NAME VM_IP; do
         --console-address 0.0.0.0:9001 \
         $MINIO_URLS > minio.log 2>&1 &" < /dev/null &
 done < "$IP_FILE"
-
+wait
 echo "Login: $MINIO_USER | Hasło: $MINIO_PASSWORD"
